@@ -1,9 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import * as ROUTES from "../constants/routes";
 const Login = () => {
+  const [error, setError] = useState("");
+  const [showError, setShowError] = useState(false);
   const [email, setEmail] = useState("");
-  const [emailPass, setEmailPass] = useState("");
+  const [password, setPassword] = useState("");
+  useEffect(() => {
+    if (email === "") {
+      setError("Email must not be empty");
+      return;
+    }
+    if (/\S+@\S+\.\S+/.test(email) === false) {
+      setError("Invalid email");
+      return;
+    }
+    if (password === "") {
+      setError("Password must not be empty");
+      return;
+    }
+    setError("");
+  }, [email, password]);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setShowError(true);
+    console.log({ password, email });
+  };
   return (
     <div className="container flex mx-auto max-w-screen-md items-center h-screen">
       <div className="flex w-3/5">
@@ -21,7 +43,9 @@ const Login = () => {
               className="mt-2 w-6/12 mb-4"
             />
           </h1>
-          <form>
+          <form onSubmit={handleSubmit}>
+            {/* 1. validate email field */}
+            {/* 2. if in-valid show error message */}
             <input
               aria-label="Enter your email address"
               className="text-sm w-full mr-3 py-5 px-4 h-2 border rounded mb-2"
@@ -30,20 +54,22 @@ const Login = () => {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
             />
+            {/* show error message if email in-valid */}
             <input
               aria-label="Enter your password"
               className="text-sm w-full mr-3 py-5 px-4 h-2 border rounded mb-2"
               type="password"
-              value={emailPass}
               placeholder="Password"
-              onChange={(event) => {setEmailPass(event.target.value)
-                console.log(emailPass)
-            }}
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
             />
+            {showError && error !== "" && (
+              <p className="text-red-500 text-center my-3">{error}</p>
+            )}
             <button
+              disabled={showError && error}
               type="submit"
               className={`bg-blue-500 text-white w-full rounded h-8 font-bold`}
-              
             >
               Log In
             </button>
