@@ -5,11 +5,11 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import FirebaseContext from './context/firebase';
-import {firebaseApp , FieldValue} from './lib/firebase'
+import {firebase , FieldValue} from './lib/firebase'
 
 ReactDOM.render(
   <React.StrictMode>
-    <FirebaseContext.Provider value={{firebaseApp , FieldValue}}>
+    <FirebaseContext.Provider value={{firebase, FieldValue}}>
     <App />
     </FirebaseContext.Provider>
     

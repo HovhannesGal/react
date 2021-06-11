@@ -1,30 +1,37 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 import * as ROUTES from "../constants/routes";
+import FirebaseContext from "../context/firebase";
+import { useSiteTitle } from "../hooks/useSiteTitle"
+
+
+
 const Login = () => {
+  useSiteTitle("Login");
+  const history = useHistory();
+  const { firebase } = useContext(FirebaseContext);
+
   const [error, setError] = useState("");
-  const [showError, setShowError] = useState(false);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  useEffect(() => {
-    if (email === "") {
-      setError("Email must not be empty");
-      return;
-    }
-    if (/\S+@\S+\.\S+/.test(email) === false) {
-      setError("Invalid email");
-      return;
-    }
-    if (password === "") {
-      setError("Password must not be empty");
-      return;
-    }
-    setError("");
-  }, [email, password]);
+
+
+
+  const invalid = email === "" || password === "";
+  
   const handleSubmit = (event) => {
     event.preventDefault();
-    setShowError(true);
-    console.log({ password, email });
+    // auth
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        history.push(ROUTES.DASHBOARD);
+      })
+      .catch((err) => {
+        setError(err.message);
+      });
   };
   return (
     <div className="container flex mx-auto max-w-screen-md items-center h-screen">
@@ -44,17 +51,14 @@ const Login = () => {
             />
           </h1>
           <form onSubmit={handleSubmit}>
-            {/* 1. validate email field */}
-            {/* 2. if in-valid show error message */}
             <input
               aria-label="Enter your email address"
               className="text-sm w-full mr-3 py-5 px-4 h-2 border rounded mb-2"
-              type="text"
+              type="email"
               placeholder="Email address"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
             />
-            {/* show error message if email in-valid */}
             <input
               aria-label="Enter your password"
               className="text-sm w-full mr-3 py-5 px-4 h-2 border rounded mb-2"
@@ -63,13 +67,13 @@ const Login = () => {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
             />
-            {showError && error !== "" && (
-              <p className="text-red-500 text-center my-3">{error}</p>
-            )}
+            {error && <p className="text-red-500 text-center my-3">{error}</p>}
             <button
-              disabled={showError && error}
+              disabled={invalid}
               type="submit"
-              className={`bg-blue-500 text-white w-full rounded h-8 font-bold`}
+              className={`bg-blue-500 text-white w-full rounded h-8 font-bold ${
+                invalid ? " opacity-50" : ""
+              }`}
             >
               Log In
             </button>

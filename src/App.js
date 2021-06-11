@@ -9,9 +9,13 @@ import Dashboard from "./pages/Dashboard";
 
 import * as ROUTES from "./constants/routes";
 import Menu from "./components/Menu";
+import {UserContext} from "./context/user"
+import useAuthListener from "./hooks/useAuthListener"
 
 function App() {
+  const  { user } = useAuthListener();
   return (
+    <UserContext.Provider value = {{ user}}>
       <BrowserRouter>
       <Menu/>
       <Switch>
@@ -23,6 +27,7 @@ function App() {
       <Redirect to ={ROUTES.NOT_FOUND}/>
       </Switch>
       </BrowserRouter>
+    </UserContext.Provider>
    
   );
 }

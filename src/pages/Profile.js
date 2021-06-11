@@ -1,6 +1,9 @@
-import React from "react"
+import  {useEffect} from "react"
+import { useSiteTitle } from "../hooks/useSiteTitle";
+
 
 const Profile = () => {
+    useSiteTitle("Profile");
     return <div>Hello From Profile</div>
 };
 
