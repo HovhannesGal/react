@@ -2,9 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import * as ROUTES from "../constants/routes";
 import FirebaseContext from "../context/firebase";
-import { useSiteTitle } from "../hooks/useSiteTitle"
 
+import { useSiteTitle } from "../hooks/useSiteTitle";
 
+// 1. function
+// 2. name start => use
+// 3. contain hook
 
 const Login = () => {
   useSiteTitle("Login");
@@ -16,13 +19,11 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-
-
   const invalid = email === "" || password === "";
-  
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    // auth
+
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
@@ -33,6 +34,7 @@ const Login = () => {
         setError(err.message);
       });
   };
+
   return (
     <div className="container flex mx-auto max-w-screen-md items-center h-screen">
       <div className="flex w-3/5">
@@ -50,6 +52,7 @@ const Login = () => {
               className="mt-2 w-6/12 mb-4"
             />
           </h1>
+
           <form onSubmit={handleSubmit}>
             <input
               aria-label="Enter your email address"
@@ -91,4 +94,5 @@ const Login = () => {
     </div>
   );
 };
+
 export default Login;

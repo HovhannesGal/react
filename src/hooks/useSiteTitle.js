@@ -1,9 +1,7 @@
-import {useEffect} from 'react';
+import { useEffect } from "react";
 
-export const useSiteTitle = (title) =>{
-    useEffect(() =>{
-      document.title = `instagram ${title}`;
-    }, []);
-  };
-
- 
+export const useSiteTitle = (title) => {
+  useEffect(() => {
+    document.title = `Instagram | ${title}`;
+  }, []);
+};

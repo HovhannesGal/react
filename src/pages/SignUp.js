@@ -5,12 +5,10 @@ import FirebaseContext from "../context/firebase";
 import { useSiteTitle } from "../hooks/useSiteTitle";
 import { doesUserNameExist } from "../services/firebase";
 
-
 const SignUp = () => {
-  useSiteTitle("SignUp");
+  useSiteTitle("Sign Up");
   const history = useHistory();
   const { firebase } = useContext(FirebaseContext);
-
 
   const [error, setError] = useState("");
 
@@ -19,25 +17,28 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-
   const invalid =
     email === "" || password === "" || userName === "" || fullName === "";
 
-    
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     const doesExistUser = await doesUserNameExist(userName);
+
     if (doesExistUser) {
       setError("User name allredy exist");
       return;
     }
+
     try {
       const createdUserResult = await firebase
         .auth()
         .createUserWithEmailAndPassword(email, password);
+
       await createdUserResult.user.updateProfile({
         displayName: userName,
       });
+
       // stexcum enq user data users collectioni hamar
       await firebase.firestore().collection("users").add({
         userId: createdUserResult.user.uid,
@@ -48,11 +49,13 @@ const SignUp = () => {
         followers: [],
         dateCreated: Date.now(),
       });
+
       history.push(ROUTES.DASHBOARD);
     } catch (err) {
       setError(err.message);
     }
   };
+
   return (
     <div className="container flex mx-auto max-w-screen-md items-center h-screen">
       <div className="flex w-3/5">
@@ -70,6 +73,7 @@ const SignUp = () => {
               className="mt-2 w-6/12 mb-4"
             />
           </h1>
+
           <form onSubmit={handleSubmit}>
             <input
               aria-label="Enter your user name"
@@ -127,4 +131,5 @@ const SignUp = () => {
     </div>
   );
 };
+
 export default SignUp;

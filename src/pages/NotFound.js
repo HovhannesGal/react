@@ -1,9 +1,13 @@
-import React from "react"
-import {useSiteTitle} from "../hooks/useSiteTitle"
+import React, { useEffect } from "react";
+import { useSiteTitle } from "../hooks/useSiteTitle";
 
 const NotFound = () => {
-    useSiteTitle("NotFound");
-    return <div>Hello From NotFound</div>
+  useSiteTitle("Not found");
+  return <div>Hello from NotFound</div>;
 };
 
 export default NotFound;
+
+// NotFound
+// Profile
+// SignUp
