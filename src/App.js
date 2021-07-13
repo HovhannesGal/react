@@ -1,21 +1,40 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { Route, BrowserRouter, Switch, Redirect } from "react-router-dom";
 
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
-import Profile from "./pages/Profile";
-import NotFound from "./pages/NotFound";
-import Dashboard from "./pages/Dashboard";
+
+// import Login from "./pages/Login";
+// import SignUp from "./pages/SignUp";
+// import Profile from "./pages/Profile";
+// import NotFound from "./pages/NotFound";
+// import Dashboard from "./pages/Dashboard";
 
 import * as ROUTES from "./constants/routes";
 import useAuthListener from "./hooks/useAuthListener";
 import UserContext from "./context/user";
+
+// const Login = lazy(() => import("./pages/Login"))
+// const SignUp = lazy(() => import("./pages/SignUp"))
+// const Profile = lazy(() => import("./pages/Profile"))
+// const NotFound = lazy(() => import("./pages/NotFound"))
+// const Dashboard = lazy(() => import("./pages/Dashboard"))
+const sleep = (promise, time = 3000) => {
+  return new Promise((res) => {
+    setTimeout(() => res(promise), time);
+  });
+};
+const Login = lazy(() => sleep(import("./pages/Login")));
+const SignUp = lazy(() => sleep(import("./pages/SignUp")));
+const Profile = lazy(() => sleep(import("./pages/Profile")));
+const NotFound = lazy(() => sleep(import("./pages/NotFound")));
+const Dashboard = lazy(() => sleep(import("./pages/Dashboard")));
+
 
 function App() {
   const { user } = useAuthListener();
 
   return (
     <UserContext.Provider value={{ user }}>
+      <Suspense fallback={<div>loading...</div>}>
       <BrowserRouter>
         <Switch>
           <LoggedInRoute
@@ -49,6 +68,7 @@ function App() {
           <LoggedInRoute user={user} path="asfsaf" component={<div></div>} />
         </Switch>
       </BrowserRouter>
+      </Suspense>
     </UserContext.Provider>
   );
 }
